@@ -18,14 +18,11 @@ import org.uncommons.watchmaker.framework.termination.TargetFitness;
 
 public final class StrategiesEvoMain
 {
-    private static final char[] ALPHABET = new char[27];
+    private static final char[] ALPHABET = new char[2];
     static
     {
-        for (char c = 'A'; c <= 'Z'; c++)
-        {
-            ALPHABET[c - 'A'] = c;
-        }
-        ALPHABET[26] = ' ';
+        ALPHABET[0] = 'C';
+	ALPHABET[1] = 'D';
     }
 
 
