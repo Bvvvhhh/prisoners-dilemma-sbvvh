@@ -5,16 +5,9 @@ public class RPD
 
 }
 
-<<<<<<< HEAD
-// stage-version (one time) Prisoners Dilemma
-static class PD 
+class PD 
 {
-    public static final gameMatrix[2][2];
-=======
-static class PD 
-{
-    public static final gameMatrix[2][2]
->>>>>>> 6df49f045e71c2061a0d56baa74d2a50880b8eba
+    public static final int gameMatrix[][] = null;
     
     public static void play(PrisonersDilemmaStrategy player1, PrisonersDilemmaStrategy player2)
     {
