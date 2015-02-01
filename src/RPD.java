@@ -3,78 +3,6 @@
  */
 
 
-/* Class Move: a move (or action) in a game */
-class Move
-{
-    // mnemonic name of the Move (e.g 'C' for "Cooperate")
-    private char c;
-
-    Move(char c)
-    {
-	this.c = c;
-    }
-    
-    public char toChar()
-    {
-	return c;
-    }
-}
-
-interface Strategy
-{
-    // returns next move from the player
-    Move getNextMove();
-
-    // informs the player about its score
-    void takeScore(int s);
-
-    // returns current score
-    int getScore();
-    
-    // update the history of the player with its own and the opponent's moves
-    void updateHistory(Move ownMove, Move opponentMove);
-}
-
-abstract class PDStrategy implements Strategy
-{
-    protected int score = 0;
-    
-
-    @Override
-    public void takeScore(int s)  {  this.score += s; }
-
-    @Override
-    public int getScore() { return this.score; }
-    
-    @Override
-    public void updateHistory(Move ownMove, Move opponentMove)  {  }
-}
-
-class PDStrategyFromDna extends PDStrategy
-{
-    public static final int MEMORY_SIZE = 1;
-
-    protected String movesTable;
-    protected CircularQueue<Move> history = new CircularQueue<Move>(Move.class, MEMORY_SIZE);
-    
-    public PDStrategyFromDna(String encoding)
-    {
-	// TODO: ensure encoding has right size according to memory
-	this.movesTable = encoding;
-	assert((1 << MEMORY_SIZE)-1 == encoding.length()); // checks that |encoding| == 2^(MEM_SIZE)-1
-    }
-
-    @Override
-    public Move getNextMove()
-    {
-	return null;
-    }
-
-    
-
-}
-
-
 class Game
 {
     public static Score play(PDStrategy player1, PDStrategy player2) throws Exception
@@ -128,12 +56,17 @@ class PD extends Game
 	Move m1 = player1.getNextMove();
 	Move m2 = player2.getNextMove();
 
+	// debugging output
+	System.out.print("FirstD vs TitForTat: (" + m1.toChar() + ", " + m2.toChar() + ")\t");
+
 	// get rewards
 	Score score = getScoreEntry(m1, m2);
 	
 	// give scores
 	player1.takeScore(score.p1);
 	player2.takeScore(score.p2);
+
+	System.out.println("Reward is: (" + score.p1 + ", " + score.p2 + ")");
 
 	// inform about history
 	player1.updateHistory(m1, m2);
@@ -155,18 +88,16 @@ class PD extends Game
 // Repeated Prisoners Dilemma
 public class RPD extends Game
 {
+    public static final int NUM_ROUNDS = 5;
 
+    // returns the score of the last game
     public static Score play(PDStrategy player1, PDStrategy player2) 
     {
-	return PD.play(player1, player2); // XXX: for now only using the stage game
+	Score s = null;
+	for (int i = 1; i <= NUM_ROUNDS; i++)
+	    s = PD.play(player1,player2);
+
+	return s;
     }
 
-    /*    public static void main(String args[])
-    {
-	PDStrategy p1, p2;
-	p1 = new PDStrategy();
-	p2 = new PDStrategy();
-
-	System.out.println("Stuff is like you know this score: " + RPD.play(p1, p2));
-        } */
 }

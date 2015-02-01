@@ -42,7 +42,7 @@ public final class StrategiesEvoMain
 
     public static String evolveString()
     {
-	final int dnaSize = 3; // corresponds to memorySize == 1
+	final int dnaSize = 5; // 5 corresponds to memorySize == 1
         StringFactory factory = new StringFactory(ALPHABET, dnaSize);
         List<EvolutionaryOperator<String>> operators = new ArrayList<EvolutionaryOperator<String>>(2);
         operators.add(new StringMutation(ALPHABET, new Probability(0.02d)));
