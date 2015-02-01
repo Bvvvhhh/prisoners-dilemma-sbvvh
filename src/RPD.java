@@ -27,19 +27,46 @@ interface Strategy
 
     // informs the player about its score
     void takeScore(int s);
+
+    // returns current score
+    int getScore();
     
     // update the history of the player with its own and the opponent's moves
     void updateHistory(Move ownMove, Move opponentMove);
 }
 
-class PDStrategy implements Strategy
+abstract class PDStrategy implements Strategy
 {
+    protected int score = 0;
+    
     @Override
-    public Move getNextMove() { return null; }
+    public Move getNextMove() { }
+
     @Override
-    public void takeScore(int s)  {  }
+    public void takeScore(int s)  {  this.score += s; }
+
+    @Override
+    public int getScore() { return this.score; }
+    
     @Override
     public void updateHistory(Move ownMove, Move opponentMove)  {  }
+}
+
+class PDStrategyFromDna extends PDStrategy
+{
+    public static final int MEMORY = 2;
+
+    protected String movesTable;
+    
+    public PDStrategy(String encoding)
+    {
+	// TODO: ensure encoding has right size according to memory
+	this.movesTable = encoding;
+
+
+    }
+    
+
 }
 
 
@@ -49,17 +76,6 @@ class Game
     {
 	throw new Exception("Don't use me, please. And wash your hands afterwards");
 	// return null;
-    }
-}
-
-
-// Repeated Prisoners Dilemma
-public class RPD extends Game
-{
-
-    public static Score play(PDStrategy player1, PDStrategy player2) throws Exception
-    {
-	return PD.play(player1, player2); // XXX: for now only using the stage game
     }
 }
 
@@ -73,12 +89,22 @@ class Score
 	this.p1 = p1;
 	this.p2 = p2;
     }
+
+    @Override
+    public String toString()
+    {
+	return "(" + p1 + " " + p2 + ")";
+    }
+
 }
 
 
 // Prisoners Dilemma game
 class PD extends Game
 {
+    public static final Move C = new Move('C');
+    public static final Move D = new Move('D');
+    
     public static final Score gameMatrix[][] = new Score[2][2]; // use two game matrices
     static {
 	final int C = 0;
@@ -121,3 +147,21 @@ class PD extends Game
     }
 }
 
+// Repeated Prisoners Dilemma
+public class RPD extends Game
+{
+
+    public static Score play(PDStrategy player1, PDStrategy player2) 
+    {
+	return PD.play(player1, player2); // XXX: for now only using the stage game
+    }
+
+    /*    public static void main(String args[])
+    {
+	PDStrategy p1, p2;
+	p1 = new PDStrategy();
+	p2 = new PDStrategy();
+
+	System.out.println("Stuff is like you know this score: " + RPD.play(p1, p2));
+        } */
+}
