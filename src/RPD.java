@@ -1,33 +1,12 @@
-class PDStrategy implements Strategy
-{
-    @Override
-    public Move getNextMove() { return null; }
-    @Override
-    public void takeScore(int s)  {  }
-    @Override
-    public void updateHistory(Move m1, Move m2)  {  }
-}
-
-interface Strategy
-{
-    Move getNextMove();
-    void takeScore(int s);
-    void updateHistory(Move m1, Move m2);
-}
-
-class Game
-{
-    public static Score play(PDStrategy player1, PDStrategy player2) throws Exception
-    {
-	throw new Exception("Don't use me, please. And wash your hands afterwards");
-	// return null;
-    }
-}
+/*
+  RPD.java: contains code related to playing Repeated Prisoner's Dilemma
+ */
 
 
-
+/* Class Move: a move (or action) in a game */
 class Move
 {
+    // mnemonic name of the Move (e.g 'C' for "Cooperate")
     private char c;
 
     Move(char c)
@@ -38,6 +17,38 @@ class Move
     public char toChar()
     {
 	return c;
+    }
+}
+
+interface Strategy
+{
+    // returns next move from the player
+    Move getNextMove();
+
+    // informs the player about its score
+    void takeScore(int s);
+    
+    // update the history of the player with its own and the opponent's moves
+    void updateHistory(Move ownMove, Move opponentMove);
+}
+
+class PDStrategy implements Strategy
+{
+    @Override
+    public Move getNextMove() { return null; }
+    @Override
+    public void takeScore(int s)  {  }
+    @Override
+    public void updateHistory(Move ownMove, Move opponentMove)  {  }
+}
+
+
+class Game
+{
+    public static Score play(PDStrategy player1, PDStrategy player2) throws Exception
+    {
+	throw new Exception("Don't use me, please. And wash your hands afterwards");
+	// return null;
     }
 }
 
@@ -89,11 +100,13 @@ class PD extends Game
 	// get rewards
 	Score score = getScoreEntry(m1, m2);
 	
+	// give scores
 	player1.takeScore(score.p1);
 	player2.takeScore(score.p2);
 
+	// inform about history
 	player1.updateHistory(m1, m2);
-	player1.updateHistory(m1, m2);
+	player2.updateHistory(m2, m1);
 
 	return score;
     }

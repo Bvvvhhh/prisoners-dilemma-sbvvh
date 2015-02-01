@@ -2,23 +2,14 @@ import java.util.List;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 /**
- * Evaluates strings and assigns a fitness score based on how many characters
- * differ from the equivalent positions in a given target string.
- * @author Daniel Dyer
+ * Evaluates strings and assigns a fitness score based on how they play RPD
  */
 public class StrategiesEvaluator implements FitnessEvaluator<String>
 {
-    private final String targetString;
 
-
-    /**
-     * Creates a {@link FitnessEvaluator} that calculates scores
-     * for Strings based on how close they are to a target String.
-     * @param targetString The target of the evolution.
-     */
-    public StrategiesEvaluator(String targetString)
+    public StrategiesEvaluator()
     {
-        this.targetString = targetString;
+
     }
 
 
@@ -31,9 +22,12 @@ public class StrategiesEvaluator implements FitnessEvaluator<String>
      * @return The fitness score (how many characters are wrong) of the
      * specified string.
      */
-    public double getFitness(String candidate,
+    public double getFitness(String candidateDna,
                              List<? extends String> population)
     {
+	return 1; // XXX: dummy return. To be replaced with score
+
+	/* OLD CODE FROM ORIGINAL EXAMPLE:
         int errors = 0;
         for (int i = 0; i < candidate.length(); i++)
         {
@@ -43,14 +37,14 @@ public class StrategiesEvaluator implements FitnessEvaluator<String>
             }
         }
         return errors;
+
+	*/
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    // NOTE should return true if the highest the fitness the better
     public boolean isNatural()
     {
-        return false;
+        return true;
     }
 }

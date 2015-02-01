@@ -14,6 +14,7 @@ import org.uncommons.watchmaker.framework.operators.StringCrossover;
 import org.uncommons.watchmaker.framework.operators.StringMutation;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 import org.uncommons.watchmaker.framework.termination.TargetFitness;
+import org.uncommons.watchmaker.framework.termination.GenerationCount;
 
 
 public final class StrategiesEvoMain
@@ -34,49 +35,28 @@ public final class StrategiesEvoMain
      */
     public static void main(String[] args)
     {
-        String target = args.length == 0 ? "HELLO WORLD" : convertArgs(args);
-        String result = evolveString(target);
+        String result = evolveString();
         System.out.println("Evolution result: " + result);
     }
 
 
-    public static String evolveString(String target)
+    public static String evolveString()
     {
-        StringFactory factory = new StringFactory(ALPHABET, target.length());
+	final int dnaSize = 3; // corresponds to memorySize == 2
+        StringFactory factory = new StringFactory(ALPHABET, dnaSize);
         List<EvolutionaryOperator<String>> operators = new ArrayList<EvolutionaryOperator<String>>(2);
         operators.add(new StringMutation(ALPHABET, new Probability(0.02d)));
         operators.add(new StringCrossover());
         EvolutionaryOperator<String> pipeline = new EvolutionPipeline<String>(operators);
         EvolutionEngine<String> engine = new GenerationalEvolutionEngine<String>(factory,
                                                                                  pipeline,
-                                                                                 new StrategiesEvaluator(target),
+                                                                                 new StrategiesEvaluator(),
                                                                                  new RouletteWheelSelection(),
                                                                                  new MersenneTwisterRNG());
         engine.addEvolutionObserver(new EvolutionLogger());
         return engine.evolve(100, // 100 individuals in the population.
                              5, // 5% elitism.
-                             new TargetFitness(0, false));
-    }
-
-
-    /**
-     * Converts an arguments array into a single String of words
-     * separated by spaces.
-     * @param args The command-line arguments.
-     * @return A single String made from the command line data.
-     */
-    private static String convertArgs(String[] args)
-    {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < args.length; i++)
-        {
-            result.append(args[i]);
-            if (i < args.length - 1)
-            {
-                result.append(' ');
-            }
-        }
-        return result.toString().toUpperCase();
+                             new GenerationCount(100));
     }
 
 
