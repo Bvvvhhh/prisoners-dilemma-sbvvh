@@ -39,8 +39,6 @@ abstract class PDStrategy implements Strategy
 {
     protected int score = 0;
     
-    @Override
-    public Move getNextMove() { }
 
     @Override
     public void takeScore(int s)  {  this.score += s; }
@@ -54,17 +52,24 @@ abstract class PDStrategy implements Strategy
 
 class PDStrategyFromDna extends PDStrategy
 {
-    public static final int MEMORY = 2;
+    public static final int MEMORY_SIZE = 1;
 
     protected String movesTable;
+    protected CircularQueue<Move> history = new CircularQueue<Move>(Move.class, MEMORY_SIZE);
     
-    public PDStrategy(String encoding)
+    public PDStrategyFromDna(String encoding)
     {
 	// TODO: ensure encoding has right size according to memory
 	this.movesTable = encoding;
-
-
+	assert((1 << MEMORY_SIZE)-1 == encoding.length()); // checks that |encoding| == 2^(MEM_SIZE)-1
     }
+
+    @Override
+    public Move getNextMove()
+    {
+	return null;
+    }
+
     
 
 }

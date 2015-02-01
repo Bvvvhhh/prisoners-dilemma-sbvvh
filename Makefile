@@ -14,5 +14,5 @@ run:
 	$(JAVA) -cp $(CLASSPATH) $(MAINCLASS)
 
 %.class : %.java
-	$(JAVAC) -cp $(CLASSPATH) $<
+	$(JAVAC) -g -cp $(CLASSPATH) $<
 
