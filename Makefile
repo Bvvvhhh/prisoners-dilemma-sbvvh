@@ -8,7 +8,7 @@ MAINCLASS=StrategiesEvoMain
 all: $(classes)
 
 clean :
-	rm -f *.class
+	rm -f src/*.class
 
 run:
 	$(JAVA) -cp $(CLASSPATH) $(MAINCLASS)
